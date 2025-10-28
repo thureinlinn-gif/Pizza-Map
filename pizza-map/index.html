@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Pizza Map</title>
+    <link rel="icon" type="image/x-icon" href="Image/dave.jpg">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Link to the external CSS file -->
+  <link id="theme-style" rel="stylesheet" href="style.css"> <!-- light theme as default -->
+  <!-- <link rel="stylesheet" href="dark.css"-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<!--Pizza Map Navbar-->
+<canvas id="canvas" width="400" height="400" style="cursor: pointer;">
+Sorry, your browser does not support canvas.
+</canvas>
+
+  <div class="w3 bg-img">
+    <button onclick="toggleTheme()" style="background: none; border: none;">
+      <img id="theme-icon" src="image/moon.png" alt="Switch to dark mode" width="34" height="34">
+      
+<button class="party-button" onclick="startParty()">
+  <span>PARTY MODE</span>
+</button>
+
+<audio id="myAudio" src="music.mp3"></audio>
+
+<!-- disco ball -->
+<div id="party-button"
+     style="display: none; position: fixed; top: 20px; left: 45%; z-index: 9999; width: 100px;">
+  <img src="image/discoball.gif" alt="disco ball"
+       style="width: 300px; height: auto;" />
+</div>
+
+<script>
+  function startParty() {
+    document.getElementById('myAudio').play();
+    document.getElementById('party-button').style.display = 'block';
+  }
+</script>
+
+
+<div class="w3-container">
+    <div class="w3-sidebar w3-bar-block w3-card" style="color: rgb(179, 116, 0);right:0; top:100px; width:300px; height:350px;fixed; z-index:999;" id="rightMenu">
+    <h6 style="margin-left: 10px;"> <b>Please Input a Range of Values to Filter</b></h6>
+    <div class="w3-bar-item">
+      <label for="minInput">Enter Min Value</label><br>
+      <input type="text" id="minInput" name="fname"><br>
+    </div>
+    <div class="w3-bar-item">
+      <label for="maxInput">Enter Max Value</label><br>
+      <input type="text" id="maxInput" name="max"><br>
+    </div>
+    <div class="w3-bar-item">
+      <button type="button" onclick="filterCSV()" style="margin-left: 100px; margin-top: 20px; padding: 8px; border-radius: 10px; border-width: 4px;">Filter!</button>
+    </div>
+    <pre id="result" class="w3-bar-item"></pre>
+    <pre id="resultBox" class="w3-small w3-margin-top w3-bar-item"></pre>
+  </div>
+</div>
+
+
+  <script>
+  
+  function openRightMenu() {
+    document.getElementById("rightMenu").style.display = "block";
+  }
+  
+  function closeRightMenu() {
+    document.getElementById("rightMenu").style.display = "none";
+  }
+  </script>
+       
+  </body>
+  </html>
+
+<!-- Map -->
+<div class=" w3-padding-64 w3-container custom-bg bg-img">
+    <div class="google-map">
+    
+    <div class="column">
+      <!-- Uses the Js for the map with the column class and these id's-->
+    <div id="map" style="height: 700px; width: 100%;"></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBky4nd1qeu25RgknumdFTXORXDzQTpLPo&map_ids=5c5132cffb0c47c8&callback=initMap" async defer></script>
+    <script src="script.js"></script>
+      
+  </div>
+  </div>
+  </div>
+  <script src="pizza-menu.js"></script>
+
+    <!-- filtering script -->
+     <script>
+function filterCSV() {
+  const min = Number(document.getElementById("minInput").value);
+  const max = Number(document.getElementById("maxInput").value);
+  const resultBox = document.getElementById("resultBox");
+
+  const allShops = window.getAllPizzaShops ? window.getAllPizzaShops() : [];
+  const filteredShops = allShops.filter(shop => 
+    !isNaN(shop.rating) && shop.rating >= min && shop.rating <= max
+  );
+
+  if (filteredShops.length > 0) {
+    const textOutput = filteredShops.map(s => `${s.rating} - ${s.name}`).join('\n');
+    resultBox.textContent = textOutput;
+  } else {
+    resultBox.textContent = "No entries found in that range.";
+  }
+
+  if (window.updateMapWithFilteredData) {
+    window.updateMapWithFilteredData(filteredShops);
+  }
+}
+  </script>
+  <!--Script for theme-->
+  <script>
+    let isDark = false;
+  
+    function toggleTheme() {
+      const themeLink = document.getElementById("theme-style");
+      const themeIcon = document.getElementById("theme-icon");
+  
+      if (isDark) {
+        themeLink.href = "style.css"; 
+        themeIcon.src = "Image/moon.png"; 
+        themeIcon.alt = "Switch to dark mode";
+      } else {
+        themeLink.href = "dark.css"; // switch to dark theme
+        themeIcon.src = "image/sun.png"; // sun icon
+        themeIcon.alt = "Switch to light mode";
+      }
+  
+      isDark = !isDark;
+    }
+  </script>
+
+
+<!-- Party Mode script -->
+ <script>
+    
+    <audio id="myAudio" src="music.mp3"></audio>
+    <button onclick="document.getElementById('myAudio').play()">Play Song</button>
+
+  </script>
+
+
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-container">
+      <p>&copy; 2025 Pizza Map</p>
+      <ul class="footer-links">
+        <li><a href="pages/contact.html">Contact</a></li>
+        <li><a href="https://www.onebitepizzarankings.com/">Dave's Website</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>
